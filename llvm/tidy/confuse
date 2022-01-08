@@ -1,0 +1,8 @@
+llvm-else-after-return
+
+google-build-using-namespace
+Do not use namespace using-directives;
+
+hicpp-signed-bitwise
+
+remind member functions implement

@@ -1,0 +1,10 @@
+---
+Checks:          'clang-diagnostic-*,clang-analyzer-*,performance-*,bugprone-*,boost-*,google-*,modernize-*,readability-*'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     none
+User:            loyxin
+CheckOptions:
+...
+
