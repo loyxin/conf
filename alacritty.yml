@@ -3,28 +3,21 @@
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
+# `env` 下的所有键值对将会被添加为环境变量
 #env:
   # TERM variable
-  #
-  # This value is used to set the `$TERM` environment variable for
-  # each instance of Alacritty. If it is not present, alacritty will
-  # check the local terminfo database and use `alacritty` if it is
-  # available, otherwise `xterm-256color` is used.
   #TERM: xterm-256color
 
 window:
   # Window dimensions (changes require restart)
-  #
-  # Specified in number of columns/lines, not pixels.
-  # If both are `0`, this setting is ignored.
+  # 窗口尺寸大小（配置变更需要重启生效）
+  # 终端显示的列和行的数量。列的数量至少是 2，如果设置为 0 那么会使用窗口管理器决定的大小。
   dimensions:
-    columns: 0
-    lines: 0
+    columns: 120
+    lines: 40
 
   # Window position (changes require restart)
-  #
-  # Specified in number of pixels.
-  # If the position is not set, the window manager will handle the placement.
+  # 单位是像素。如果不进行设置，那么由窗口管理器决定位置
   #position:
   #  x: 0
   #  y: 0
@@ -33,10 +26,15 @@ window:
   #
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
+  # 窗口内边距（配置变更需要重启生效）
+  #
+  # 调整窗口的内边距（单位为像素）。此填充由DPI缩放，并且始终在相对的两边添加指定的值。
+  # 注解：内边距是窗口边框相对于终端显示内容的空白部分，可以参考 CSS
   padding:
     x: 0
     y: 0
 
+  # 在终端内容周围平均分配额外的 padding。
   # Spread additional padding evenly around the terminal content.
   dynamic_padding: false
 
@@ -49,18 +47,18 @@ window:
   # Values for `decorations` (macOS only):
   #     - transparent: Title bar, transparent background and title bar buttons
   #     - buttonless: Title bar, transparent background, but no title bar buttons
-  decorations: full
+  decorations: none
 
-  # Startup Mode (changes require restart)
+  # 启动模式（配置变更需要重启生效）
   #
-  # Values for `startup_mode`:
-  #   - Windowed
-  #   - Maximized
-  #   - Fullscreen
+  # 可以为如下的值:
+  #   - Windowed: 窗口化
+  #   - Maximized: 最大化窗口
+  #   - Fullscreen: 全屏
   #
-  # Values for `startup_mode` (macOS only):
+  # macos 可以独占的配置:
   #   - SimpleFullscreen
-  # startup_mode: Windowed
+  startup_mode: Maximized
 
   # Window title
   #title: Alacritty
@@ -71,8 +69,10 @@ window:
 scrolling:
   # Maximum number of lines in the scrollback buffer.
   # Specifying '0' will disable scrolling.
+  # 回滚缓冲区中的最大行数。 设置为 0 会禁用滚动
   history: 10000
 
+  # 一次滚动几行
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
   multiplier: 3
@@ -176,7 +176,7 @@ colors:
   primary:
     background: '0x282a36'
     foreground: '0xf8f8f2'
- 
+
   # Normal colors
   normal:
     black:   '0x000000'
@@ -187,7 +187,7 @@ colors:
     magenta: '0xff79c6'
     cyan:    '0x8be9fd'
     white:   '0xbbbbbb'
- 
+
   # Bright colors
   bright:
     black:   '0x555555'
@@ -197,7 +197,7 @@ colors:
     blue:    '0xcaa9fa'
     magenta: '0xff79c6'
     cyan:    '0x8be9fd'
-    white:   '0xffffff' 
+    white:   '0xffffff'
 #Colors (Tomorrow Night Bright)
 # colors:
   # # Default colors
@@ -297,8 +297,10 @@ colors:
 #   - Linear
 #
 # Specifying a `duration` of `0` will disable the visual bell.
+# 终端响铃
 visual_bell:
   animation: EaseOutExpo
+  # 动画闪烁的持续时间（以毫秒为单位）。设置为 0 表示禁用动画效果
   duration: 0
   color: '0xffffff'
 
@@ -306,7 +308,7 @@ visual_bell:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 1.00
+background_opacity: 0.8
 
 # Mouse bindings
 #
@@ -365,14 +367,14 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
   # When set to `true`, selected text will be copied to the primary clipboard.
+  # 选中文本后是否复制到主剪贴板，关于主剪贴板是啥可以参考 https://wiki.archlinux.org/index.php/clipboard
   save_to_clipboard: false
 
 # Allow terminal applications to change Alacritty's window title.
 dynamic_title: true
 
 cursor:
-  # Cursor style
-  #
+  # 光标形状
   # Values for `style`:
   #   - ▇ Block
   #   - _ Underline
@@ -381,9 +383,11 @@ cursor:
 
   # If this is `true`, the cursor will be rendered as a hollow box when the
   # window is not focused.
+  # 如果为true，则当窗口未聚焦时，光标将显示为空心框。
   unfocused_hollow: true
 
 # Live config reload (changes require restart)
+# 是否启用配置热更新
 live_config_reload: true
 
 # Shell
@@ -520,6 +524,87 @@ enable_experimental_conpty_backend: false
 #   - SpawnNewInstance
 #   - ToggleFullscreen
 #   - None
+#
+
+
+# 键盘码可以从下面找到
+#    https://docs.rs/glutin/*/glutin/event/enum.VirtualKeyCode.html#variants
+#    这里对于不清楚键盘上每个键的英文名称的同学，可以参考
+#    https://www.computerhope.com/jargon/b/backquot.htm
+# - `action`: 执行预定义的操作
+#
+#   - ToggleViMode: 开启/关闭 Vi 模式
+#   - SearchForward: 向前搜索
+#   - SearchBackward: 向后搜索
+#   - Copy: 复制
+#   - Paste: 粘贴
+#   - IncreaseFontSize: 增加字号
+#   - DecreaseFontSize: 减小字号
+#   - ResetFontSize: 重置字号
+#   - ScrollPageUp: 向上翻一页
+#   - ScrollPageDown: 向下翻一页
+#   - ScrollHalfPageUp: 向上翻半页
+#   - ScrollHalfPageDown: 向下翻半页
+#   - ScrollLineUp: 向上滚动一行
+#   - ScrollLineDown: 向下滚动一行
+#   - ScrollToTop: 滚动到顶部
+#   - ScrollToBottom: 滚动到底部
+#   - ClearHistory: 清空滚动缓冲区
+#   - Hide: 隐藏窗口
+#   - Minimize: 最小化
+#   - Quit: 退出
+#   - ToggleFullscreen: 在全屏/当前模式下切换
+#   - SpawnNewInstance: 启动一个新的 Alacritty
+#   - ClearLogNotice: 清 UI 上的 warning 和 error 的 notice
+#   - ClearSelection: 清空当前选中
+#   - ReceiveChar: 不执行任何动作，将字符输入
+#   - None: 不执行任何动作，并且拦截掉
+#
+# - Vi 模式下独占的操作
+#
+#   - Open: 打开一个链接，launcher 的配置参考 `url.launcher`
+#   - ToggleNormalSelection: 切换到普通选中模式
+#   - ToggleLineSelection: 切换到行选中模式
+#   - ToggleBlockSelection: 切换到块选中模式
+#   - ToggleSemanticSelection: 切换到语义选中模式，参考  `selection.semantic_escape_chars`.
+#
+# - Vi 模式下独占的光标操作:
+#
+#   - Up: 向上一行
+#   - Down: 向下一行
+#   - Left: 向左一个字符
+#   - Right: 向右一个字符
+#   - First: 第一列，如果已经在第一列，那么到起始行
+#   - Last: 最后一列，如果已经在最后一列，那么到起始行
+#   - FirstOccupied: 此终端行中的第一个非空单元格，如果已经位于该行的第一个单元格时，那么该行的第一个非空单元格
+#   - High: 屏幕最上方
+#   - Middle: 屏幕中间
+#   - Low: 屏幕底部
+#   - SemanticLeft: 前一个在被语义上分隔的单词的开头
+#   - SemanticRight: 下一个在被语义上分隔的单词的开头
+#   - SemanticLeftEnd:  前一个被语义上分隔的单词的结尾
+#   - SemanticRightEnd: 下一个被语义上分隔的单词的结尾
+#   - WordLeft: 前一个被空白符分隔的单词的开头
+#   - WordRight: 下一个被空白符分隔的单词的开头
+#   - WordLeftEnd: 前一个被空白符分隔的单词的结尾
+#   - WordRightEnd: 下一个被空白符分隔的单词的结尾
+#   - Bracket: 与光标所在位置的括号匹配的字符
+#   - SearchNext: 向后搜索
+#   - SearchPrevious: 向前搜索
+#   - SearchStart: vi 模式光标左侧的首次匹配
+#   - SearchEnd: vi 模式光标右侧的最后匹配
+#
+# - 搜索模式独占的操作:
+#   - SearchFocusNext: 将焦点移到下一个搜索匹配项。
+#   - SearchFocusPrevious: 将焦点移到上一个搜索匹配项。
+#   - SearchConfirm: 确认搜索
+#   - SearchCancel: 取消搜索
+#   - SearchClear: 清空搜索内容
+#   - SearchDeleteWord: 删除搜索内容的最后一个单词
+#   - SearchHistoryPrevious: 跳转搜索内容历史的上一个
+#   - SearchHistoryNext: 跳转搜索内容历史的下一个
+#
+
 #
 # Values for `action` (macOS only):
 #   - ToggleSimpleFullscreen: Enters fullscreen without occupying another space
